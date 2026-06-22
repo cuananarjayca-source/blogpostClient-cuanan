@@ -24,7 +24,7 @@ const routes = [
         meta: { requiresAuth: true }
     },
     {
-        path: '/edit/:id',
+        path: '/posts/edit/:id',
         name: 'edit-post',
         component: EditPostView,
         meta: { requiresAuth: true }
