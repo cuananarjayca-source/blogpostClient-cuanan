@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { postService } from '../services/postService';
+import { authService } from '../services/authService'; // 1. Import your auth service
 
 const route = useRoute();
 const router = useRouter();
@@ -22,10 +23,21 @@ const fetchPostDetails = async () => {
     isLoading.value = true;
     errorMessage.value = '';
     
-    // Hits your exact route: router.get('/getPostById/:id', getPostById);
     const post = await postService.getPostById(postId);
     
     if (post) {
+      // 2. Extract author ID safely (handles both populated object and plain string ID)
+      const postAuthorId = post.author?._id || post.author;
+      const currentUser = authService.currentUser.value;
+      const currentUserId = currentUser?.id || currentUser?._id;
+
+      // 3. SECURITY GUARD: Kick out anyone who is not the original author
+      if (!currentUserId || String(currentUserId) !== String(postAuthorId)) {
+        console.warn('⚠️ Unauthorized edit attempt blocked.');
+        router.push('/'); 
+        return;
+      }
+
       title.value = post.title;
       content.value = post.content;
     }
@@ -48,15 +60,12 @@ const handleUpdatePost = async () => {
     isUpdating.value = true;
     errorMessage.value = '';
 
-    // Hits your backend route: router.patch('/updatePost/:id', protect, updatePost);
     await postService.updatePost(postId, {
       title: title.value,
       content: content.value
     });
 
     console.log('✅ Post modifications saved successfully via PATCH request!');
-    
-    // Redirect back to home feed dashboard
     router.push('/');
   } catch (error) {
     console.error('❌ Update operation rejected:', error);
@@ -66,7 +75,6 @@ const handleUpdatePost = async () => {
   }
 };
 
-// Pre-load data automatically on initialization
 onMounted(fetchPostDetails);
 </script>
 
@@ -78,11 +86,12 @@ onMounted(fetchPostDetails);
       <p>Loading your story details from database...</p>
     </div>
 
-    <div v-else-if="errorMessage" class="error-text form-error">
+    <div v-if="errorMessage" class="error-text form-error">
       {{ errorMessage }}
       <button @click="router.push('/')" class="btn-cancel" type="button">Back to Feed</button>
     </div>
 
+    <!-- 4. Minor Fix: Changed v-else-if to v-else to gracefully fallback when no errors or loading exist -->
     <form v-else @submit.prevent="handleUpdatePost">
       <div class="form-field">
         <label for="title">Update Title:</label>

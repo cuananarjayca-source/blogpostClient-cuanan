@@ -9,7 +9,7 @@
         <div class="card-actions">
             <router-link :to="`/posts/${post._id}`" class="btn-read"> Read More </router-link>
 
-            <router-link v-if="isAuthor" :to="`/posts/edit/${post._id}`" class="btn-edit"> Edit </router-link>
+            <router-link v-if="isAuthor" :to="`/edit/${post._id}`" class="btn-edit"> Edit </router-link>
 
             <button v-if="canDelete" @click="$emit('delete-post', post._id)" class="btn-delete">
                 Delete
