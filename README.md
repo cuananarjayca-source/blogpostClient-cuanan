@@ -1,41 +1,28 @@
-# Capstone 3 Demo App Overview:
+# BlogPostAPI
 
-## Application Name: Taro606
+## 🚀 Purpose & Features
 
-## Team Members:
-* **Arjay Cuanan**
-* **Maiki Raval**
+This API handles data persistence, resource relationships, and security controls for the frontend application. It contains no unnecessary bloat, sticking strictly to core functional requirements.
 
-## User Credentials:
-* Admin User
-    * email: **admin**@mail.com
-    * password: **admin123**
-* Dummy Customer
-    * email: **customer**@mail.com
-    * password: **customer123**
+### Key API Functionalities
+1. **User Authentication & Security**
+   - User registration with unique accounts (`email`, `username`, `password`).
+   - Secure user login generating temporary access tokens.
+   - Server-side password hashing using industry-standard hashing protocols before database storage.
+   - Custom authentication middleware to protect state-changing routes.
 
-## Features:
-## Features by Maiki
-**Vue JS Template:**
-* Login Page
-* Logout Page
-* Register Page
-* Admin Dashboard
-* Cart 
-* Orders
-* Payments
+2. **Blog Post Management (CRUD)**
+   - **Create**: Authenticated users can write and publish new blog posts.
+   - **Read**: Publicly view all available blog posts or fetch details of a single post by its ID.
+   - **Update**: Securely modify an existing blog post (restricted exclusively to the original author).
 
-## Features by Arjay
-### Product Resources
-* Product Catalog
-* Product Details
-* Home Page
-* Frontend Design
-* Sample Products 
-* Navbar 
-* Footer 
-* Sidebar 
- 
+   
+## Credentials
 
+1. **User**
+  - **Username**: johndoe@mail.com
+  - **Password**: john12345
 
-# blogpostClient-cuanan
+2. **Admin**
+  - **Username**: admin@mail.com
+  - **Password**: admin12345
